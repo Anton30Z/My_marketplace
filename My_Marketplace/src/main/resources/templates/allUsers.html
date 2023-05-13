@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ПОльзователи</title>
+</head>
+<body>
+<h3>Все пользователи: </h3>
+<a href="/admin">Главное меню</a>
+<br>
+<div th:each="user : ${usersAll}">
+    <p th:text="'Пользователь ID №: ' + ${user.getId()}"></p>
+    <p th:text="'Логин: ' + ${user.getLogin()}">
+    <p th:text="'Пароль: ' + ${user.getPassword()}">
+    <form method="POST" th:action="@{/admin/allUsers/{id}(id=${user.getId()})}" th:object="${user}">
+        <label for="statusR">Роль пользователя: </label>
+        <select name="roleStatus" id="statusR">
+            <option th:text = "Пользователь"
+                    th:value = "ROLE_USER">
+            </option>
+            <option th:selected="${user.getRole()} == 'ROLE_ADMIN'"
+                    th:text = "Администратор"
+                    th:value = "ROLE_ADMIN">
+            </option>
+        </select>
+        <input type="submit" value="Изменить">
+    </form>
+    <p th:text="'Заказы: ' + ${user.getOrderList()}">
+    <br>
+    <hr>
+</div>
+</body>
+</html>

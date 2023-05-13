@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Заказы</title>
+</head>
+<body>
+<a href="/admin">Главное меню</a>
+<br>
+<form th:method="POST" th:action="@{/admin/allOrders/search}">
+  <fieldset>
+    <legend>Поиск</legend>
+    <label for="search">Введите 4 последним буквы/цифры заказа</label>
+    <input type="text" id="search" name="search" minlength="4" maxlength="4" th:value="*{value_search}">
+    <br>
+    <div>
+      <input type="submit" value="Найти">
+    </div>
+  </fieldset>
+</form>
+<hr>
+<div th:each="order : ${search_order}">
+  <h3>Результат поиска: </h3>
+  <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
+  <img th:src="'/img/' + ${order.getProduct().getImageList()[0].getFileName()}" width="300px">
+  <p th:text="'Наименование: ' + ${order.getProduct().getTitle()}">
+  <p th:text="'Количество: ' + ${order.getCount()}">
+  <p th:text="'Цена: ' + ${order.getPrice()}">
+  <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
+  <p th:text="'Cтатус: ' + ${order.getStatus()}">
+  <hr>
+</div>
+<hr>
+<h3>Все Заказы пользователей: </h3>
+<div th:each="order : ${ordersAll}">
+  <h3 th:text="'Заказ №' + ${order.getNumber()}"></h3>
+  <img th:src="'/img/' + ${order.getProduct().getImageList()[0].getFileName()}" width="300px">
+  <p th:text="'Наименование: ' + ${order.getProduct().getTitle()}">
+  <p th:text="'Количество: ' + ${order.getCount()}">
+  <p th:text="'Цена: ' + ${order.getPrice()}">
+  <p th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"></p>
+  <p th:text="'Cтатус: ' + ${order.getStatus()}">
+  <br>
+
+  <form method="POST" th:action="@{/admin/allOrders/{id}(id=${order.getId()})}" th:object="${order}">
+    <label for="status">Выберите текущее состояние заказа: </label>
+    <select name="status" id="status">
+      <option th:each="enum : ${T(com.example.my_marketplace.enumm.Status).values()}"
+              th:text = "${enum}"
+              th:value = "${enum}">
+      </option>
+    </select>
+    <br>
+    <br>
+    <input type="submit" value="Изменить">
+  </form>
+
+  <hr>
+ </div>
+ </body>
+ </html>
