@@ -3,10 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Cписок товаров</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+          crossorigin="anonymous">
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
 <h1>Главная страница магазина</h1>
-<a href="/authentication">Вход</a>
+<nav class="navbar navbar-dark bg-dark">
+  <a class="nav-link" href="/authentication">Вход</a>
+</nav>
+
 <h3>Cортировка, поиск, фильтрация</h3>
 <form th:method="POST" th:action="@{/product/search}">
   <fieldset>
@@ -29,34 +40,46 @@
       <label for="descending_price">Отсортировать по убыванию цены</label>
       <p>Категория товаров: </p>
       <input type="radio" id="furniture" name="contract" value="furniture">
-      <label for="furniture">Мебель</label>
+      <label for="furniture">Бытовая техника</label>
       <input type="radio" id="appliances" name="contract" value="appliances">
-      <label for="appliances">Бытовая техника</label>
+      <label for="appliances">Одежда</label>
       <input type="radio" id="clothes" name="contract" value="clothes">
-      <label for="clothes">Одежда</label>
+      <label for="clothes">Мебель</label>
       <br>
       <br>
       <input type="submit" value="Найти">
     </div>
   </fieldset>
 </form>
+
 <hr>
-<h3>Результат поиска, cортировки, фильтрации</h3>
-<div th:each="product : ${search_product}">
-  <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
-  <br>
-  <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
-  <p th:text="'Цена: ' + ${product.getPrice()}"></p>
-  <hr>
+<div class="container">
+  <div class="row">
+    <div class="card m-auto" style="width: 18rem" th:each="product : ${search_product}">
+      <h4>Результаты поиска</h4>
+      <img class="card-img-top" th:src="'/img/' + ${product.imageList[0].getFileName()}" alt="Card image cap">
+      <div class="card-body">
+        <h6 class="card-title" th:text="${product.getTitle()}"></h6>
+        <h5 class="card-subtitle mb-2 text-muted" th:text="${product.getPrice()} + ' &#8381;'"></h5>
+        <a class="btn btn-primary" th:href="@{/product/info/{id}(id=${product.getId()})}">Описание</a>
+      </div>
+    </div>
+  </div>
 </div>
+
 <hr>
-<h3>Доступные товары: </h3>
-<div th:each="product : ${products}">
-  <img th:src="'/img/' + ${product.imageList[0].getFileName()}" width="300px">
-  <br>
-  <a th:href="@{/product/info/{id}(id=${product.getId()})}" th:text="${product.getTitle()}"></a>
-  <p th:text="'Цена: ' + ${product.getPrice()}"></p>
-  <hr>
+<div class="container">
+  <div class="row">
+    <div class="card m-auto" style="width: 18rem" th:each="product : ${products}">
+      <img class="card-img-top" th:src="'/img/' + ${product.imageList[0].getFileName()}" alt="Card image cap">
+      <div class="card-body">
+        <h6 class="card-title" th:text="${product.getTitle()}"></h6>
+        <h5 class="card-subtitle mb-2 text-muted" th:text="${product.getPrice()} + ' &#8381;'"></h5>
+        <a class="btn btn-primary" th:href="@{/product/info/{id}(id=${product.getId()})}">Описание</a>
+      </div>
+    </div>
+  </div>
 </div>
+
 </body>
 </html>
